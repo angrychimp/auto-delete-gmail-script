@@ -111,9 +111,8 @@ function Run() {
       console.info(" [" + label + ":" + DELETE_RULES[label] + "] Trashed: " + total)
       if (!anotherPass) {
         threads = GmailApp.search(search, 0, 1);
-        // Arbitrary threshold; for some reason a repeat search always turns up a few results
-        if (threads.length > 5) {
-          // If we have more than 5 messages remaining, schedule another pass
+        if (threads.length > 0) {
+          // If we have more than 50 messages remaining, schedule another pass
           anotherPass = true
         }
       }

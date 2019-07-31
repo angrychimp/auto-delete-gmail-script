@@ -119,7 +119,7 @@ function Run() {
     } catch (e) { Logger.log(" [" + label + ":" + DELETE_RULES[label] + "] Error: " + e) }
   }
   
-  if (false && anotherPass) {
+  if (anotherPass) {
     // Schedule another run for 2 minutes from now
     ScriptApp.newTrigger("Run")
            .timeBased()

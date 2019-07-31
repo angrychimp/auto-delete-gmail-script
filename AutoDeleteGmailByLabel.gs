@@ -86,7 +86,7 @@ function buildRules() {
 }
 
 function Run() {
-  Logger.log("[" + (new Date()) + "] Running delete")
+  console.info("[" + (new Date()) + "] Running delete")
   Initialize()
   var anotherPass = false;
   for (var label in DELETE_RULES) {
@@ -108,15 +108,16 @@ function Run() {
           }
         }
       }
-      Logger.log(" [" + label + ":" + DELETE_RULES[label] + "] Trashed: " + total)
+      console.info(" [" + label + ":" + DELETE_RULES[label] + "] Trashed: " + total)
       if (!anotherPass) {
         threads = GmailApp.search(search, 0, 1);
-        if (threads.length > 0) {
-          // If we have more than one message remaining, schedule another pass
+        // Arbitrary threshold; for some reason a repeat search always turns up a few results
+        if (threads.length > 5) {
+          // If we have more than 5 messages remaining, schedule another pass
           anotherPass = true
         }
       }
-    } catch (e) { Logger.log(" [" + label + ":" + DELETE_RULES[label] + "] Error: " + e) }
+    } catch (e) { console.debug(" [" + label + ":" + DELETE_RULES[label] + "] Error: " + e) }
   }
   
   if (anotherPass) {

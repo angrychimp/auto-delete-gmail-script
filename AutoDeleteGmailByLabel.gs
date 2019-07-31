@@ -103,7 +103,7 @@ function Run() {
         for (var j=0; j<messages.length; j++) {
           var email = messages[j];       
           if (email.getDate() < age) {
-            //email.moveToTrash();
+            email.moveToTrash();
             total += 1;
           }
         }

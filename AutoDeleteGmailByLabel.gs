@@ -90,22 +90,28 @@ function Run() {
   Initialize()
   var anotherPass = false;
   for (var label in DELETE_RULES) {
+    var total = 0;
     var age = new Date();
     age.setDate(age.getDate() - DELETE_RULES[label]);
     var purgeDate = Utilities.formatDate(age, Session.getTimeZone(), "yyyy-MM-dd");
     var search = "label:(" + label + ") before:" + purgeDate;
-    var total = 0;
     try {
       // Search for mail, but limit to 1000 at a time
       var threads = GmailApp.search(search, 0, 500);
-      for (var i=0; i<threads.length; i++) {
+      for (var i = 0; i < threads.length; i++) {
         var messages = GmailApp.getMessagesForThread(threads[i]);
-        for (var j=0; j<messages.length; j++) {
+        for (var j = 0; j < messages.length; j++) {
           var email = messages[j];       
-          if (email.getDate() < age) {
-            email.moveToTrash();
-            total += 1;
+          if (email.getDate() > age) {
+            // If the conversation is actually newer than our purgeDate remove it from the list
+            messages.splice(j, 1)
+            j = j - 1
           }
+        }
+        // Move messages to trash
+        if (messages.length > 0) {
+          total += messages.length
+          GmailApp.moveMessagesToTrash(messages)
         }
       }
       console.info(" [" + label + ":" + DELETE_RULES[label] + "] Trashed: " + total)
